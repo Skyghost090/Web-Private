@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=WebPrivate
+Comment=Web Private
+Exec=webPrivate
+Icon=internet-web-browser
+Terminal=false
+Categories=Utility;
+Type=Application
+StartupNotify=false
