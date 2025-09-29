@@ -1,0 +1,4 @@
+#!/bin/bash
+
+pkexec python3 deamon.py &
+python3 main.py
