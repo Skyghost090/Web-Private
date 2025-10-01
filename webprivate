@@ -1,4 +1,4 @@
 #!/bin/bash
-
-pkexec python3 deamon.py &
-python3 main.py
+cd /usr/share/webprivate/
+python3 main.py &
+pkexec --keep-cwd python3 deamon.py

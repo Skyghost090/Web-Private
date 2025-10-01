@@ -1,11 +1,12 @@
 import sys, os, time, toml
 
-from siteWidget import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from urllib.request import urlopen
+from siteWidget import *
 from pyqttoast import Toast, ToastPreset
+from sitesConfig import *
 
 initialTime = []
 endTime = []
@@ -24,10 +25,22 @@ def addSiteListToArray(initalTimeParam, endTimeParam, nameParam, adressParam):
     name.append(nameParam)
     adress.append(adressParam)
 
-def addSiteClick(newsiteAdress, exitFuntion):
-    page = urlopen("https://" + newsiteAdress)
-    htmlBytes = page.read()
+def openUrl(url, exitFunction):
+    try:
+        page = urlopen("https://" + url)
+        return page
+    except:
+        os.system("notify-send 'Wrong Url'")
+
+def addSiteClick(newsiteAdress, exitFunction):
+    page = openUrl(newsiteAdress, exitFunction)
+    try:
+        htmlBytes = page.read()
+    except:
+        return
+
     title = ""
+
     try:
         html = htmlBytes.decode("utf-8")
         startIndex = html.find("<title>") + len("<title>")
@@ -38,17 +51,18 @@ def addSiteClick(newsiteAdress, exitFuntion):
         title = newsiteAdress
 
     print(title)
-    os.system("bash input.sh {} {} {} {}".format(newsiteAdress, title, 0, 0))
-    exitFuntion()
+    os.system("bash input.sh '{}' '{}' '{}' '{}'".format(newsiteAdress, title, 0, 0))
+    exitFunction()
 
-def saveChanges(context, index):
-    os.system("bash remove.sh {}".format(adress[index]))
-    os.system("bash input.sh {} {} {} {}".format(adress[index], name[index], initialTime[index], endTime[index]))
-    context.loadList()
+class sitesConfigStrategy():
+    def __init__(self, guiContext, index):
+        self.guiContext = guiContext
+        self.index = index
+        self.paramList = [adress[index], name[index], initialTime[index], endTime[index]]
 
-def removeButtonAction(context, index):
-    os.system("bash remove.sh {}".format(adress[index]))
-    context.loadList()
+    def execConfigChanges(self, configClass):
+        os.system(configClass.exec_(self.paramList))
+        self.guiContext.loadList()
 
 class MainWindow(QMainWindow):
     def versionSessionDialog(self):
@@ -101,9 +115,8 @@ class MainWindow(QMainWindow):
             self.nothingIcon = QLabel("")
             self.nothingIcon.setPixmap(QIcon.fromTheme("dialog-warning").pixmap(QSize(100,100)))
             self.nothingIcon.setAlignment(Qt.AlignCenter)
-            self.nothingIcon.setFixedHeight(135)
-            self.nothingLabel = QLabel("""\nChoose Sites Wisely
-Not every website is safe or reliable.\nFiltering protects you from miss information\nand online risks. Stay smart — use trusted\nsources only.""")
+            self.nothingIcon.setFixedHeight(175)
+            self.nothingLabel = QLabel("""\nChoose Sites Wisely\nNot every website is safe or reliable.\nFiltering protects you from miss information\nand online risks. Stay smart — use trusted\nsources only.""")
             self.nothingLabel.setFixedWidth(550)
             self.nothingLabel.setStyleSheet("font-size: 17px")
             self.nothingLabel.setAlignment(Qt.AlignHCenter)
@@ -112,32 +125,33 @@ Not every website is safe or reliable.\nFiltering protects you from miss informa
 
         print("{} {}".format(initialTime, endTime))
 
-    def updateFinalValue(self, index):
+    def updateFinalValue(self):
         self.finalHourLabel.setText("Final Time: {}".format(self.finalHourSlider.value()))
-        endTime[index] = self.finalHourSlider.value()
+        self.siteConfig.paramList[3] = self.finalHourSlider.value()
 
-    def updateInitialValue(self, index):
+    def updateInitialValue(self):
         self.initialHourLabel.setText("Initial Time: {}".format(self.initialHourSlider.value()))
-        initialTime[index] = self.initialHourSlider.value()
+        self.siteConfig.paramList[2] = self.initialHourSlider.value()
 
     def configArea(self, index):
         self.clear_()
 
+        self.siteConfig = sitesConfigStrategy(self, index)
         self.exit = QPushButton("\nReturn to Home\n")
         self.exit.setFixedWidth(550)
-        self.exit.clicked.connect(lambda: saveChanges(self, index))
+        self.exit.clicked.connect(lambda: self.siteConfig.execConfigChanges(saveChanges()))
         self.remove = QPushButton("\nRemove Site\n")
         self.remove.setFixedWidth(550)
-        self.remove.clicked.connect(lambda: removeButtonAction(self, index))
+        self.remove.clicked.connect(lambda: self.siteConfig.execConfigChanges(removeButtonAction()))
         self.initialHourLabel = QLabel("Initial Time: {}".format(initialTime[index]))
         self.initialHourLabel.setFixedHeight(10)
         self.initialHourSlider = configSiteWidgetsConstructor.Slider(self, initialTime[index])
-        self.initialHourSlider.valueChanged.connect(lambda: self.updateInitialValue(index))
+        self.initialHourSlider.valueChanged.connect(lambda: self.updateInitialValue())
 
         self.finalHourLabel = QLabel("Final Time: {}".format(endTime[index]))
         self.finalHourLabel.setFixedHeight(10)
         self.finalHourSlider = configSiteWidgetsConstructor.Slider(self, endTime[index])
-        self.finalHourSlider.valueChanged.connect(lambda: self.updateFinalValue(index))
+        self.finalHourSlider.valueChanged.connect(lambda: self.updateFinalValue())
 
         self.vboxLayout.addWidget(self.initialHourLabel)
         self.vboxLayout.addWidget(self.initialHourSlider)

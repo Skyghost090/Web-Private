@@ -1,2 +1,13 @@
 
 
+[[site]]
+adress = 'www.youtube.com'
+name = 'YouTube'
+initTime = 10
+endTime = 20
+
+[[site]]
+adress = 'github.com'
+name = 'GitHub · Build and ship software on a single, collaborative platform · GitHub'
+initTime = 5
+endTime = 12
