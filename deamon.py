@@ -7,17 +7,17 @@ def verifyTime(site):
         os.system("sed -i '/{}/d' /etc/hosts".format(site['adress']))
 
 def updateList():
+    with open("list.toml", "r+") as file_:
+        config = toml.load(file_)
     for site in config['site']:
-        print("time: {} initTime: {} endTime: {}".format(time.localtime().tm_hour, site['initTime'], site['endTime']))
+        # print("time: {} initTime: {} endTime: {}".format(time.localtime().tm_hour, site['initTime'], site['endTime']))
         verifyTime(site)
 
 def verifySites():
-    with open("list.toml", "r+") as file_:
-        config = toml.load(file_)
     try:
         updateList()
     except:
-        print("Dont have a sites")
+        print("[info]: Dont have a sites")
 
 while(1):
     time.sleep(1)

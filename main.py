@@ -66,7 +66,7 @@ class sitesConfigStrategy():
 
 class MainWindow(QMainWindow):
     def versionSessionDialog(self):
-        os.system("xdg-open https://github.com/Skyghost090/Lsfg-Gui")
+        os.system("xdg-open https://github.com/Skyghost090/Web-Private")
 
     def newSiteDialog(self):
         customDialog = QDialog(self)
@@ -115,6 +115,7 @@ class MainWindow(QMainWindow):
             self.nothingIcon = QLabel("")
             self.nothingIcon.setPixmap(QIcon.fromTheme("dialog-warning").pixmap(QSize(100,100)))
             self.nothingIcon.setAlignment(Qt.AlignCenter)
+            # self.nothingIcon.setFixedHeight(175)
             self.nothingLabel = QLabel("""\n\n\nChoose Sites Wisely\nNot every website is safe or reliable.\nFiltering protects you from miss information\nand online risks. Stay smart — use trusted\nsources only.""")
             self.nothingLabel.setFixedWidth(550)
             self.nothingLabel.setStyleSheet("font-size: 17px")
@@ -174,7 +175,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setGeometry(200, 200, 600, 400)
+        self.setFixedSize(600, 400)
         self.setWindowTitle("WebPrivate")
 
         self.toolbar()
