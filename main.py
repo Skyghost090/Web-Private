@@ -1,4 +1,4 @@
-import sys, os, time, toml
+import sys, os, time, toml, qdarkstyle
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -144,12 +144,12 @@ class MainWindow(QMainWindow):
         self.remove.setFixedWidth(550)
         self.remove.clicked.connect(lambda: self.siteConfig.execConfigChanges(removeButtonAction()))
         self.initialHourLabel = QLabel("Initial Time: {}".format(initialTime[index]))
-        self.initialHourLabel.setFixedHeight(10)
+        self.initialHourLabel.setFixedHeight(20)
         self.initialHourSlider = configSiteWidgetsConstructor.Slider(self, initialTime[index])
         self.initialHourSlider.valueChanged.connect(lambda: self.updateInitialValue())
 
         self.finalHourLabel = QLabel("Final Time: {}".format(endTime[index]))
-        self.finalHourLabel.setFixedHeight(10)
+        self.finalHourLabel.setFixedHeight(20)
         self.finalHourSlider = configSiteWidgetsConstructor.Slider(self, endTime[index])
         self.finalHourSlider.valueChanged.connect(lambda: self.updateFinalValue())
 
@@ -177,6 +177,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setFixedSize(600, 400)
         self.setWindowTitle("WebPrivate")
+        self.setStyleSheet(qdarkstyle.load_stylesheet())
 
         self.toolbar()
 
