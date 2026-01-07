@@ -18,7 +18,7 @@ Whether you're trying to avoid distractions, limit social media usage, or just s
 - A Linux-based operating system
 - Python 3.x (or your preferred scripting language, if applicable)
 - PyQt Installed
-- pyqt-toast-notification and toml installed with pip
+- pyqt-toast-notification and toml (as root priveleges) installed with pip
 - Root privileges (required to modify system hosts file)
 
 ### Installation
