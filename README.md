@@ -18,6 +18,7 @@ Whether you're trying to avoid distractions, limit social media usage, or just s
 - A Linux-based operating system
 - Python 3.x (or your preferred scripting language, if applicable)
 - PyQt Installed
+- pyqt-toast-notification installed with pip
 - Root privileges (required to modify system hosts file)
 
 ### Installation
@@ -25,7 +26,7 @@ Whether you're trying to avoid distractions, limit social media usage, or just s
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/webprivate.git
+git clone https://github.com/Skyghost090/Web-Private.git
 cd webprivate
 ./webprivate
 ```
