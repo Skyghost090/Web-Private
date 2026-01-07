@@ -20,5 +20,5 @@ def verifySites():
         print("[info]: Dont have a sites")
 
 while(1):
-    time.sleep(1)
+    time.sleep(3)
     verifySites()
